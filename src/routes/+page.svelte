@@ -23,6 +23,9 @@
 		const res = await fetch(`/search?q=${uriQuery}`);
 		const data = await res.json();
 		results = data;
+		if (results.length === 0) {
+			alert('No results found');
+		}
 	};
 
 	onMount(() => {
@@ -33,11 +36,6 @@
 			search();
 		}
 	});
-
-	const doThing = () => {
-		return location.assign(`/?query=${type}:${query}`);
-		//location.reload();
-	};
 
 	const displayResult = (result: { [key: string]: string }) => {
 		const dataPoints: {
