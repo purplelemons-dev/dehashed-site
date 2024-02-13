@@ -7,3 +7,4 @@ services:
     ports:
       - "10115:5173"
     image: purplelemons/dehashed-site
+    restart: unless-stopped
