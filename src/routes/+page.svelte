@@ -72,7 +72,9 @@
 
 <br />
 
-<p>Search results</p>
+{#if results.length !== 0}
+	<p>Search results</p>
+{/if}
 <ul>
 	{#each results as result}
 		{#each displayResult(result) as dataPoint}
@@ -83,3 +85,42 @@
 		{/each}
 	{/each}
 </ul>
+
+<style>
+	sub {
+		position: fixed;
+		bottom: 0;
+		left: 0;
+		width: 100%;
+		background-color: black;
+		color: white;
+		text-align: center;
+		padding: 1em;
+	}
+
+	select {
+		font-size: 1.5em;
+	}
+
+	input {
+		font-size: 1.5em;
+	}
+	button {
+		font-size: 1.5em;
+	}
+
+	ul {
+		list-style-type: none;
+	}
+
+	li {
+		margin: 1em;
+	}
+
+	li a {
+		color: azure;
+	}
+	li a:hover {
+		color: lightblue;
+	}
+</style>

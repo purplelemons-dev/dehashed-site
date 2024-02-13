@@ -1,7 +1,3 @@
-/*
-    serves a sveltekit GET request
-*/
-
 
 import type { RequestHandler } from '@sveltejs/kit';
 
