@@ -56,9 +56,10 @@
 		});
 		return dataPoints;
 	};
+	const srcCode = 'https://github.com/purplelemons-dev/dehashed-site';
 </script>
 
-<h1>Welcome to SvelteKit</h1>
+<sub> Source code: <a href={srcCode}>{srcCode}</a> </sub>
 
 <p>Enter a query to search for a page</p>
 <select bind:value={type}>
