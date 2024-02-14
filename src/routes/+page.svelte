@@ -2,6 +2,7 @@
 	import { onMount } from 'svelte';
 
 	$: results = [];
+	$: resultsMessage = '';
 	$: type = 'Select Type';
 	$: query = '';
 
@@ -19,22 +20,33 @@
 	];
 
 	const search = async () => {
+		results = [];
+		resultsMessage = 'Loading...';
 		const uriQuery = encodeURIComponent(`${type}:${query}`);
 		const res = await fetch(`/search?q=${uriQuery}`);
 		const data = await res.json();
-		results = data;
-		if (results.length === 0) {
+		if (data.length === 0) {
 			alert('No results found');
+			return;
 		}
+		results = data;
+		resultsMessage = `Results:`;
 	};
 
 	onMount(() => {
-		if (window.location.search) {
-			const urlParams = new URLSearchParams(window.location.search);
+		const searchQ = window.location.search;
+		if (searchQ) {
+			const urlParams = new URLSearchParams(searchQ);
 			const q = urlParams.get('query') || '';
 			[type, query] = q.split(':');
 			search();
 		}
+		document.querySelector('#inputfield')?.addEventListener('keyup', async (event) => {
+			if (event.key === 'Enter') {
+				event.preventDefault();
+				await search();
+			}
+		});
 	});
 
 	const displayResult = (result: { [key: string]: string }) => {
@@ -60,31 +72,38 @@
 <sub> Source code: <a href={srcCode}>{srcCode}</a> </sub>
 
 <p>Enter a query to search for a page</p>
+
 <select bind:value={type}>
 	{#each identifiers as option}
 		<option value={option}>{option}</option>
 	{/each}
 </select>
-<input type="text" bind:value={query} />
+<input type="search" bind:value={query} id="inputfield" />
 <button on:click={search}> Search </button>
 
 <br />
 
-{#if results.length !== 0}
-	<p>Search results</p>
-{/if}
+<p>{resultsMessage}</p>
 <ul>
 	{#each results as result}
-		{#each displayResult(result) as dataPoint}
-			<li>
-				<!-- href={dataPoint.url}-->
-				{dataPoint.type}: <a href="/search{dataPoint.url}">{dataPoint.name}</a>
-			</li>
-		{/each}
+		<li class="datapoint">
+			{#each displayResult(result) as dataPoint}
+				<p>
+					<!-- href={dataPoint.url}-->
+					{dataPoint.type}: <a href="/search{dataPoint.url}">{dataPoint.name}</a>
+				</p>
+			{/each}
+		</li>
 	{/each}
 </ul>
 
 <style>
+	.datapoint {
+		padding: 0.5em;
+		border-radius: 1em;
+		background-color: #115;
+	}
+
 	sub {
 		position: fixed;
 		bottom: 0;
