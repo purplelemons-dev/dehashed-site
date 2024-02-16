@@ -25,6 +25,10 @@
 		const uriQuery = encodeURIComponent(`${type}:${query}`);
 		const res = await fetch(`/search?q=${uriQuery}`);
 		const data = await res.json();
+		if (data === undefined) {
+			alert('No results found');
+			return;
+		}
 		if (data.length === 0) {
 			alert('No results found');
 			return;
